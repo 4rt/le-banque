@@ -4,6 +4,8 @@ on:
     types: [published]
 jobs:
   build:
+    name: Build, lint, and test and publish package
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
