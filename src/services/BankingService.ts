@@ -1,63 +1,91 @@
 import UsersDao from '../daos/UsersDao';
 import {
-    NotEnoughMoney,
-    ReceiverDoesNotExist,
-    SenderDoesNotExist,
-    UserAlreadyExists,
-    UserDoesNotExist,
-    WrongArguments
+  NotEnoughMoney,
+  ReceiverDoesNotExist,
+  SenderDoesNotExist,
+  UserAlreadyExists,
+  UserDoesNotExist,
+  WrongArguments,
 } from '../errors';
 
 class BankingService {
-    constructor() {
-        console.log('BankingService singleton')
-    }
+  constructor() {
+    console.log('BankingService singleton');
+  }
 
-    createUser(userName: string): string | WrongArguments | UserAlreadyExists {
-        if (!userName) throw new WrongArguments();
+  createUser(userName: string): string | WrongArguments | UserAlreadyExists {
+    if (!userName) throw new WrongArguments();
 
-        if (UsersDao.userExists(userName)) throw new UserAlreadyExists();
+    if (UsersDao.userExists(userName)) throw new UserAlreadyExists();
 
-        return UsersDao.createUser(userName);
-    }
+    return UsersDao.createUser(userName);
+  }
 
-    deposit(userName: string, amount: number, currency: string): number | WrongArguments | UserDoesNotExist {
-        if (!userName || !amount || !currency) throw new WrongArguments();
-        
-        if (!UsersDao.userExists(userName)) throw new UserDoesNotExist();
-        
-        return UsersDao.deposit(userName, amount, currency);
-    }
+  deposit(
+    userName: string,
+    amount: number,
+    currency: string
+  ): number | WrongArguments | UserDoesNotExist {
+    if (!userName || !amount || !currency) throw new WrongArguments();
 
-    getBalance(userName: string, currency: string): number | WrongArguments | UserDoesNotExist {
-        if (!userName || !currency) throw new WrongArguments();
+    if (!UsersDao.userExists(userName)) throw new UserDoesNotExist();
 
-        if (!UsersDao.userExists(userName)) throw new UserDoesNotExist();
-        
-        return UsersDao.getBalance(userName, currency);
-    }
+    return UsersDao.deposit(userName, amount, currency);
+  }
 
-    send(fromUsername: string, toUsername: string, amount: number, currency: string): { fromUsernameBalance: number; toUsernameBalance: number } | WrongArguments | NotEnoughMoney | SenderDoesNotExist | ReceiverDoesNotExist {
-        if (!fromUsername || !toUsername || !amount || !currency) throw new WrongArguments();
+  getBalance(
+    userName: string,
+    currency: string
+  ): number | WrongArguments | UserDoesNotExist {
+    if (!userName || !currency) throw new WrongArguments();
 
-        if (!UsersDao.enoughMoney(fromUsername, amount, currency)) throw new NotEnoughMoney();
+    if (!UsersDao.userExists(userName)) throw new UserDoesNotExist();
 
-        if (!UsersDao.userExists(fromUsername)) throw new SenderDoesNotExist();
+    return UsersDao.getBalance(userName, currency);
+  }
 
-        if (!UsersDao.userExists(toUsername)) throw new ReceiverDoesNotExist();
+  send(
+    fromUsername: string,
+    toUsername: string,
+    amount: number,
+    currency: string
+  ):
+    | { fromUsernameBalance: number; toUsernameBalance: number }
+    | WrongArguments
+    | NotEnoughMoney
+    | SenderDoesNotExist
+    | ReceiverDoesNotExist {
+    if (!fromUsername || !toUsername || !amount || !currency)
+      throw new WrongArguments();
 
-        return UsersDao.sendMoney(fromUsername, toUsername, amount, currency);
-    }
+    if (!UsersDao.enoughMoney(fromUsername, amount, currency))
+      throw new NotEnoughMoney();
 
-    withdraw(userName: string, amount: number, currency: string): { newBalance: number } | WrongArguments | UserDoesNotExist | NotEnoughMoney {
-        if (!userName || !currency) throw new WrongArguments();
+    if (!UsersDao.userExists(fromUsername)) throw new SenderDoesNotExist();
 
-        if (!UsersDao.userExists(userName)) throw new UserDoesNotExist();
+    if (!UsersDao.userExists(toUsername)) throw new ReceiverDoesNotExist();
 
-        if (!UsersDao.enoughMoney(userName, amount, currency)) throw new NotEnoughMoney();
+    return UsersDao.sendMoney(fromUsername, toUsername, amount, currency);
+  }
 
-        return UsersDao.withdrawMoney(userName, amount, currency);
-    }
+  withdraw(
+    userName: string,
+    amount: number,
+    currency: string
+  ):
+    | { newBalance: number }
+    | WrongArguments
+    | UserDoesNotExist
+    | NotEnoughMoney {
+    if (!userName || !currency) throw new WrongArguments();
+
+    if (!UsersDao.userExists(userName)) throw new UserDoesNotExist();
+
+    if (!UsersDao.enoughMoney(userName, amount, currency))
+      throw new NotEnoughMoney();
+
+    return UsersDao.withdrawMoney(userName, amount, currency);
+  }
 }
 
 export default new BankingService();
