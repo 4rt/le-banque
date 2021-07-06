@@ -27,24 +27,29 @@ describe('UsersDao', () => {
 
     afterAll(() => {
       UsersDao.users = [];
-    })
-  })
+    });
+  });
 
   describe('creates user', () => {
     beforeEach(() => {
       UsersDao.users = [];
-    })
+    });
 
     it('creates user', () => {
       UsersDao.createUser('test name');
 
       expect(UsersDao.users).toHaveLength(1);
-    })
+    });
 
     it('sets default balance and currency', () => {
       UsersDao.createUser('test name2');
 
-      expect(UsersDao.users).toEqual([{'balance': [{'amount': 0, 'currency': 'unknown'}], 'userName': 'test name2'}]);
-    })
-  })
-})
+      expect(UsersDao.users).toEqual([
+        {
+          balance: [{ amount: 0, currency: 'unknown' }],
+          userName: 'test name2',
+        },
+      ]);
+    });
+  });
+});
