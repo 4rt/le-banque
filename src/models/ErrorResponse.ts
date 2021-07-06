@@ -1,4 +1,4 @@
-import { BankingError } from './errors/types';
+import { BankingError } from '../errors/types';
 import BaseResponse from './BaseResponse';
 
 export default class ErrorResponse extends BaseResponse {

@@ -1,8 +1,8 @@
 import { BankingError } from './errors/types';
 import { IExBanking, Ok } from './types';
 import BankingService from './services/BankingService';
-import ErrorResponse from './ErrorResponse';
-import OkResponse from './OkResponse';
+import ErrorResponse from './models/ErrorResponse';
+import OkResponse from './models/OkResponse';
 
 // TODO: use builder for OkResponse
 export class ExBanking implements IExBanking {

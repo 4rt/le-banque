@@ -11,20 +11,12 @@ class UsersDao {
   }
 
   enoughMoney(userName: string, amount: number, currency: string): boolean {
-    // find user by name
-    // get user balance by currency
-    // check if user balance is equal or greater than amount
-    console.log(
-      `userName: ${userName}, amount: ${amount}, currency: ${currency}`
-    );
+    const currentAmount = this.getBalance(userName, currency);
 
-    return false;
+    return currentAmount >= amount;
   }
 
   createUser(userName: string): string {
-    // Creates new user in the system
-    // New user has zero balance of any currency
-
     this.users.push({
       userName,
       balance: [
@@ -41,20 +33,47 @@ class UsersDao {
   getBalance(userName: string, currency = 'unknown'): number {
     const user = this.users.find(foundUser => foundUser.userName === userName)!;
 
-    return user.balance.find(balance => balance.currency === currency)!.amount;
+    const balance = user.balance.find(currentBalance => currentBalance.currency === currency);
+
+    if (balance) {
+      return balance.amount;
+    } else {
+      return 0;
+    }
   }
 
   deposit(userName: string, amount: number, currency: string): number {
-    // Increases user's balance in given currency by amount value
-    console.log(
-      `userName: ${userName}, amount: ${amount}, currency: ${currency}`
-    );
-    // find user by name
-    // get user balance by currency
-    // sum old and new balance and return new value
-    // const currentBalance = this.users.filter(user => user.userName === userName).length > 0;
+    const userIndex = this.users.findIndex(user => user.userName === userName);
 
-    return 0;
+    let newBalance = 0;
+
+    this.users[userIndex].balance.forEach(balance => {
+      if (balance.currency === currency) {
+        newBalance = balance.amount += amount
+        balance.amount = newBalance;
+      }
+    })
+
+    return newBalance;
+  }
+
+  withdrawMoney(
+      userName: string,
+      amount: number,
+      currency: string
+  ): number {
+    const userIndex = this.users.findIndex(user => user.userName === userName);
+
+    let newBalance = 0;
+
+    this.users[userIndex].balance.forEach(balance => {
+      if (balance.currency === currency) {
+        newBalance = balance.amount -= amount
+        balance.amount = newBalance;
+      }
+    })
+
+    return newBalance;
   }
 
   sendMoney(
@@ -67,23 +86,14 @@ class UsersDao {
       `fromUsername: ${fromUsername}, toUsername: ${toUsername}, amount: ${amount}, currency: ${currency}`
     );
 
+    const fromUsernameBalance = this.withdrawMoney(fromUsername, amount, currency);
+
+    const toUsernameBalance = this.deposit(toUsername, amount, currency);
+
     return {
-      fromUsernameBalance: 0,
-      toUsernameBalance: 0,
+      fromUsernameBalance,
+      toUsernameBalance,
     };
-  }
-
-  withdrawMoney(
-    userName: string,
-    amount: number,
-    currency: string
-  ): { newBalance: number } {
-    // Decreases user's balance in given currency by amount value
-    console.log(
-      `userName: ${userName}, amount: ${amount}, currency: ${currency}`
-    );
-
-    return { newBalance: 0 };
   }
 }
 
