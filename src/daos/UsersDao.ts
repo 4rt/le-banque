@@ -1,9 +1,10 @@
-class UsersDao {
-  users: Array<{ id: string; userName: string }> = [];
+type Balance = {
+  currency: string | 'unknown',
+  amount: number
+}
 
-  constructor() {
-    console.log('UsersDao singleton');
-  }
+class UsersDao {
+  users: Array<{ userName: string, balance: Balance[] }> = [];
 
   userExists(userName: string): boolean {
     return this.users.filter(user => user.userName === userName).length > 0;
@@ -21,22 +22,28 @@ class UsersDao {
   }
 
   createUser(userName: string): string {
-    const id = new Date().getTime().toString(36);
+    // Creates new user in the system
+    // New user has zero balance of any currency
+
     this.users.push({
-      id,
       userName,
+      balance: [{
+        currency: 'unknown',
+        amount: 0
+      }]
     });
 
-    return id;
+    return userName;
   }
 
-  getBalance(userName: string, currency: string): number {
-    console.log(`userName: ${userName}, currency: ${currency}`);
+  getBalance(userName: string, currency = 'unknown'): number {
+    const user = this.users.find(foundUser => foundUser.userName === userName)!;
 
-    return 0;
+    return user.balance.find(balance => balance.currency === currency)!.amount;
   }
 
   deposit(userName: string, amount: number, currency: string): number {
+    // Increases user's balance in given currency by amount value
     console.log(
       `userName: ${userName}, amount: ${amount}, currency: ${currency}`
     );
@@ -69,6 +76,7 @@ class UsersDao {
     amount: number,
     currency: string
   ): { newBalance: number } {
+    // Decreases user's balance in given currency by amount value
     console.log(
       `userName: ${userName}, amount: ${amount}, currency: ${currency}`
     );

@@ -1,6 +1,7 @@
 // import { ExBanking } from '../src';
 // import { WrongArguments } from '../src/errors';
 import UsersDao from '../src/daos/UsersDao';
+// import { ExBanking } from "../src";
 
 describe('ExBanking', () => {
   // it('test', () => {
@@ -13,21 +14,37 @@ describe('ExBanking', () => {
   //   expect(test.getBalance('name', 'USD')).toEqual({ success: true, balance: 0 });
   //   expect(test.send('fromName', 'toName', 10, 'USD')).toEqual({ success: true, fromUsernameBalance: 0, toUsernameBalance: 0 });
   // });
-  //
-  // it('WrongArguments', () => {
-  //   const wrongArgumentsError = new WrongArguments();
-  //   expect(wrongArgumentsError.success).toBe(false);
-  //   expect(wrongArgumentsError.message).toBe('Wrong arguments');
-  // })
-
-  it('UsersDao', async () => {
-    // const test = await UsersDao.createUser('userName');
-    // expect(test).toEqual({balance: {}});
-
-    await UsersDao.createUser('userName2');
-
-    expect(await UsersDao.patchUserByUserName('userName2', 10, 'EEK')).toEqual({
-      balance: { EEK: 10 },
-    });
-  });
 });
+
+describe('UsersDao', () => {
+  describe('has one instance', () => {
+    // @ts-ignore
+    expect(() => new UsersDao()).toThrow();
+    expect(UsersDao.users).toHaveLength(0);
+    UsersDao.createUser('test name');
+    UsersDao.createUser('test name2');
+    expect(UsersDao.users).toHaveLength(2);
+
+    afterAll(() => {
+      UsersDao.users = [];
+    })
+  })
+
+  describe('creates user', () => {
+    beforeEach(() => {
+      UsersDao.users = [];
+    })
+
+    it('creates user', () => {
+      UsersDao.createUser('test name');
+
+      expect(UsersDao.users).toHaveLength(1);
+    })
+
+    it('sets default balance and currency', () => {
+      UsersDao.createUser('test name2');
+
+      expect(UsersDao.users).toEqual([{'balance': [{'amount': 0, 'currency': 'unknown'}], 'userName': 'test name2'}]);
+    })
+  })
+})

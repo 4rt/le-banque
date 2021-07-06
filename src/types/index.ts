@@ -1,6 +1,6 @@
 import { BankingError } from '../errors/types';
 
-export type Ok = { success: true };
+export type Ok = { success: boolean };
 
 export interface IExBanking {
   createUser: (username: string) => Ok | BankingError;

@@ -1,7 +1,10 @@
 import { BankingError } from './errors/types';
 import { IExBanking, Ok } from './types';
 import BankingService from './services/BankingService';
+import ErrorResponse from './ErrorResponse';
+import OkResponse from './OkResponse';
 
+// TODO: use builder for OkResponse
 export class ExBanking implements IExBanking {
   public createUser(username: string): Ok | BankingError {
     console.log(`user created ${username}`);
@@ -9,9 +12,9 @@ export class ExBanking implements IExBanking {
     try {
       BankingService.createUser(username);
 
-      return { success: true };
+      return new OkResponse();
     } catch (error) {
-      return { success: false, message: error.message, name: 'Error' };
+      return new ErrorResponse(error);
     }
   }
 
