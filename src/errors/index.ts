@@ -40,7 +40,10 @@ export class SenderDoesNotExist extends BaseError {
 }
 
 export class ReceiverDoesNotExist extends BaseError {
-  constructor(message = 'Receiver does not exists', name = 'ReceiverDoesNotExist') {
+  constructor(
+    message = 'Receiver does not exists',
+    name = 'ReceiverDoesNotExist'
+  ) {
     super(message, name);
   }
 }

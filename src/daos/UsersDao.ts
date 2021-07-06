@@ -1,10 +1,10 @@
 type Balance = {
-  currency: string | 'unknown',
-  amount: number
-}
+  currency: string | 'unknown';
+  amount: number;
+};
 
 class UsersDao {
-  users: Array<{ userName: string, balance: Balance[] }> = [];
+  users: Array<{ userName: string; balance: Balance[] }> = [];
 
   userExists(userName: string): boolean {
     return this.users.filter(user => user.userName === userName).length > 0;
@@ -27,10 +27,12 @@ class UsersDao {
 
     this.users.push({
       userName,
-      balance: [{
-        currency: 'unknown',
-        amount: 0
-      }]
+      balance: [
+        {
+          currency: 'unknown',
+          amount: 0,
+        },
+      ],
     });
 
     return userName;
