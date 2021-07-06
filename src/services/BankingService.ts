@@ -37,7 +37,7 @@ class BankingService {
       amount: number,
       currency: string
   ): number | WrongArguments | UserDoesNotExist {
-    if (!userName || !amount || amount < 0 || !currency) throw new WrongArguments();
+    if (!userName || !currency || !amount || amount <= 0) throw new WrongArguments();
 
     if (!UsersDao.userExists(userName)) throw new UserDoesNotExist();
 
@@ -53,7 +53,7 @@ class BankingService {
       | WrongArguments
       | UserDoesNotExist
       | NotEnoughMoney {
-    if (!userName || !currency || !amount || amount < 0) throw new WrongArguments();
+    if (!userName || !currency || !amount || amount <= 0) throw new WrongArguments();
 
     if (!UsersDao.userExists(userName)) throw new UserDoesNotExist();
 

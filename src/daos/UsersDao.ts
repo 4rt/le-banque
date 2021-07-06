@@ -3,6 +3,7 @@ type Balance = {
   amount: number;
 };
 
+// TODO: handle 2 decimal precision of money amount
 class UsersDao {
   users: Array<{ userName: string; balance: Balance[] }> = [];
 
