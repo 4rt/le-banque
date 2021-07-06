@@ -9,7 +9,7 @@ describe('UsersDao', () => {
       UsersDao.createUser('test name');
       UsersDao.createUser('test name2');
       expect(UsersDao.users).toHaveLength(2);
-    })
+    });
 
     afterAll(() => {
       UsersDao.users = [];
@@ -18,15 +18,17 @@ describe('UsersDao', () => {
 
   describe('Utils', () => {
     beforeEach(() => {
-      UsersDao.users = [{
-        userName: 'test',
-        balance: [
-          {
-            currency: 'USD',
-            amount: 10,
-          },
-        ],
-      }];
+      UsersDao.users = [
+        {
+          userName: 'test',
+          balance: [
+            {
+              currency: 'USD',
+              amount: 10,
+            },
+          ],
+        },
+      ];
     });
 
     it('checks weather money amount on balance is enough', () => {
@@ -35,7 +37,7 @@ describe('UsersDao', () => {
       expect(UsersDao.enoughMoney('test', 11, 'USD')).toBeFalsy();
       expect(UsersDao.enoughMoney('test', 11.02, 'USD')).toBeFalsy();
       expect(UsersDao.enoughMoney('test', 9.999, 'USD')).toBeTruthy();
-    })
+    });
 
     it('checks if a user already exists', () => {
       expect(UsersDao.userExists('test')).toBeTruthy();
@@ -43,7 +45,7 @@ describe('UsersDao', () => {
       expect(UsersDao.userExists('test ')).toBeFalsy();
       expect(UsersDao.userExists(' test ')).toBeFalsy();
       expect(UsersDao.userExists(' test')).toBeFalsy();
-    })
+    });
 
     afterAll(() => {
       UsersDao.users = [];
@@ -106,7 +108,7 @@ describe('UsersDao', () => {
               amount: 0,
             },
           ],
-        }
+        },
       ];
     });
 
@@ -116,7 +118,7 @@ describe('UsersDao', () => {
       expect(UsersDao.getBalance('test3')).toEqual(0);
       expect(UsersDao.getBalance('test', 'EEK')).toEqual(0);
       expect(UsersDao.getBalance('test3', '')).toEqual(0);
-    })
+    });
 
     afterAll(() => {
       UsersDao.users = [];
@@ -151,69 +153,189 @@ describe('UsersDao', () => {
               amount: 10,
             },
           ],
-        }
+        },
       ];
     });
 
     it('deposits amount of currency', () => {
       expect(UsersDao.users).toEqual([
-        { userName: 'test', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 0 } ]},
-        { userName: 'test2', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 10 } ]}
+        {
+          userName: 'test',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 0 },
+          ],
+        },
+        {
+          userName: 'test2',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 10 },
+          ],
+        },
       ]);
       UsersDao.deposit('test', 5, 'EUR');
       expect(UsersDao.getBalance('test', 'EUR')).toBe(5);
       expect(UsersDao.users).toEqual([
-        { userName: 'test', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 5 } ]},
-        { userName: 'test2', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 10 } ]}
+        {
+          userName: 'test',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 5 },
+          ],
+        },
+        {
+          userName: 'test2',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 10 },
+          ],
+        },
       ]);
       UsersDao.deposit('test', 15, 'EUR');
       expect(UsersDao.getBalance('test', 'EUR')).toBe(20);
       expect(UsersDao.users).toEqual([
-        { userName: 'test', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 20 } ]},
-        { userName: 'test2', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 10 } ]}
+        {
+          userName: 'test',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 20 },
+          ],
+        },
+        {
+          userName: 'test2',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 10 },
+          ],
+        },
       ]);
     });
 
     it('withdraws amount of currency', () => {
       expect(UsersDao.users).toEqual([
-        { userName: 'test', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 0 } ]},
-        { userName: 'test2', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 10 } ]},
+        {
+          userName: 'test',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 0 },
+          ],
+        },
+        {
+          userName: 'test2',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 10 },
+          ],
+        },
       ]);
       UsersDao.withdrawMoney('test', 1, 'USD');
       expect(UsersDao.getBalance('test', 'USD')).toBe(9);
       expect(UsersDao.users).toEqual([
-        { userName: 'test', balance: [{ currency: 'USD', amount: 9 }, { currency: 'EUR', amount: 0 } ]},
-        { userName: 'test2', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 10 } ]}
+        {
+          userName: 'test',
+          balance: [
+            { currency: 'USD', amount: 9 },
+            { currency: 'EUR', amount: 0 },
+          ],
+        },
+        {
+          userName: 'test2',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 10 },
+          ],
+        },
       ]);
       UsersDao.withdrawMoney('test', 9, 'USD');
       expect(UsersDao.getBalance('test', 'EUR')).toBe(0);
       expect(UsersDao.users).toEqual([
-        { userName: 'test', balance: [{ currency: 'USD', amount: 0 }, { currency: 'EUR', amount: 0 } ]},
-        { userName: 'test2', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 10 } ]}
+        {
+          userName: 'test',
+          balance: [
+            { currency: 'USD', amount: 0 },
+            { currency: 'EUR', amount: 0 },
+          ],
+        },
+        {
+          userName: 'test2',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 10 },
+          ],
+        },
       ]);
     });
 
     it('sends money from user to user of currency', () => {
       expect(UsersDao.users).toEqual([
-        { userName: 'test', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 0 } ]},
-        { userName: 'test2', balance: [{ currency: 'USD', amount: 10 }, { currency: 'EUR', amount: 10 } ]},
+        {
+          userName: 'test',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 0 },
+          ],
+        },
+        {
+          userName: 'test2',
+          balance: [
+            { currency: 'USD', amount: 10 },
+            { currency: 'EUR', amount: 10 },
+          ],
+        },
       ]);
       UsersDao.sendMoney('test', 'test2', 1, 'USD');
       expect(UsersDao.users).toEqual([
-        { userName: 'test', balance: [{ currency: 'USD', amount: 9 }, { currency: 'EUR', amount: 0 } ]},
-        { userName: 'test2', balance: [{ currency: 'USD', amount: 11 }, { currency: 'EUR', amount: 10 } ]},
+        {
+          userName: 'test',
+          balance: [
+            { currency: 'USD', amount: 9 },
+            { currency: 'EUR', amount: 0 },
+          ],
+        },
+        {
+          userName: 'test2',
+          balance: [
+            { currency: 'USD', amount: 11 },
+            { currency: 'EUR', amount: 10 },
+          ],
+        },
       ]);
       UsersDao.sendMoney('test', 'test2', 1, 'USD');
       expect(UsersDao.users).toEqual([
-        { userName: 'test', balance: [{ currency: 'USD', amount: 8 }, { currency: 'EUR', amount: 0 } ]},
-        { userName: 'test2', balance: [{ currency: 'USD', amount: 12 }, { currency: 'EUR', amount: 10 } ]},
+        {
+          userName: 'test',
+          balance: [
+            { currency: 'USD', amount: 8 },
+            { currency: 'EUR', amount: 0 },
+          ],
+        },
+        {
+          userName: 'test2',
+          balance: [
+            { currency: 'USD', amount: 12 },
+            { currency: 'EUR', amount: 10 },
+          ],
+        },
       ]);
       UsersDao.sendMoney('test2', 'test', 10, 'EUR');
       expect(UsersDao.users).toEqual([
-        { userName: 'test', balance: [{ currency: 'USD', amount: 8 }, { currency: 'EUR', amount: 10 } ]},
-        { userName: 'test2', balance: [{ currency: 'USD', amount: 12 }, { currency: 'EUR', amount: 0 } ]},
+        {
+          userName: 'test',
+          balance: [
+            { currency: 'USD', amount: 8 },
+            { currency: 'EUR', amount: 10 },
+          ],
+        },
+        {
+          userName: 'test2',
+          balance: [
+            { currency: 'USD', amount: 12 },
+            { currency: 'EUR', amount: 0 },
+          ],
+        },
       ]);
-    })
+    });
 
     afterAll(() => {
       UsersDao.users = [];

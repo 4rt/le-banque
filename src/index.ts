@@ -7,12 +7,26 @@ import OkResponse from './models/OkResponse';
 // TODO: use builder for OkResponse
 export class ExBanking implements IExBanking {
   public createUser(username: string): Ok | BankingError {
-    console.log(`user created ${username}`);
-
     try {
       BankingService.createUser(username);
 
       return new OkResponse();
+    } catch (error) {
+      return new ErrorResponse(error);
+    }
+  }
+
+  public getBalance(
+    username: string,
+    currency: string
+  ): (Ok & { balance: number }) | BankingError {
+    try {
+      const balance = BankingService.getBalance(username, currency) as number;
+
+      return {
+        ...new OkResponse(),
+        ...{ balance },
+      };
     } catch (error) {
       return new ErrorResponse(error);
     }
@@ -23,19 +37,19 @@ export class ExBanking implements IExBanking {
     amount: number,
     currency: string
   ): (Ok & { newBalance: number }) | BankingError {
-    console.log(
-      `deposit - username: ${username}, amount: ${amount}, currency: ${currency}`
-    );
-
     try {
-      BankingService.deposit(username, amount, currency);
+      const newBalance = BankingService.deposit(
+        username,
+        amount,
+        currency
+      ) as number;
 
       return {
-        ...{ success: true },
-        ...{ newBalance: 0 },
+        ...new OkResponse(),
+        ...{ newBalance },
       };
     } catch (error) {
-      return { success: false, message: error.message, name: 'Error' };
+      return new ErrorResponse(error);
     }
   }
 
@@ -44,37 +58,19 @@ export class ExBanking implements IExBanking {
     amount: number,
     currency: string
   ): (Ok & { newBalance: number }) | BankingError {
-    console.log(
-      `withdraw - username: ${username}, amount: ${amount}, currency: ${currency}`
-    );
-
     try {
-      BankingService.withdraw(username, amount, currency);
+      const newBalance = BankingService.withdraw(
+        username,
+        amount,
+        currency
+      ) as number;
 
       return {
-        ...{ success: true },
-        ...{ newBalance: 0 },
+        ...new OkResponse(),
+        ...{ newBalance },
       };
     } catch (error) {
-      return { success: false, message: error.message, name: 'Error' };
-    }
-  }
-
-  public getBalance(
-    username: string,
-    currency: string
-  ): (Ok & { balance: number }) | BankingError {
-    console.log(`get balance - username: ${username}, currency: ${currency}`);
-
-    try {
-      BankingService.getBalance(username, currency);
-
-      return {
-        ...{ success: true },
-        ...{ balance: 0 },
-      };
-    } catch (error) {
-      return { success: false, message: error.message, name: 'Error' };
+      return new ErrorResponse(error);
     }
   }
 
@@ -86,20 +82,21 @@ export class ExBanking implements IExBanking {
   ):
     | (Ok & { fromUsernameBalance: number; toUsernameBalance: number })
     | BankingError {
-    console.log(
-      `send money - fromUsername: ${fromUsername}, toUsername: ${toUsername}, amount: ${amount}, currency: ${currency}`
-    );
-
     try {
-      BankingService.send(fromUsername, toUsername, amount, currency);
+      const { fromUsernameBalance, toUsernameBalance } = BankingService.send(
+        fromUsername,
+        toUsername,
+        amount,
+        currency
+      ) as { fromUsernameBalance: number; toUsernameBalance: number };
 
       return {
-        ...{ success: true },
-        ...{ fromUsernameBalance: 0 },
-        ...{ toUsernameBalance: 0 },
+        ...new OkResponse(),
+        ...{ fromUsernameBalance },
+        ...{ toUsernameBalance },
       };
     } catch (error) {
-      return { success: false, message: error.message, name: 'Error' };
+      return new ErrorResponse(error);
     }
   }
 }

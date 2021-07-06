@@ -33,11 +33,12 @@ class BankingService {
   }
 
   deposit(
-      userName: string,
-      amount: number,
-      currency: string
+    userName: string,
+    amount: number,
+    currency: string
   ): number | WrongArguments | UserDoesNotExist {
-    if (!userName || !currency || !amount || amount <= 0) throw new WrongArguments();
+    if (!userName || !currency || !amount || amount <= 0)
+      throw new WrongArguments();
 
     if (!UsersDao.userExists(userName)) throw new UserDoesNotExist();
 
@@ -45,15 +46,12 @@ class BankingService {
   }
 
   withdraw(
-      userName: string,
-      amount: number,
-      currency: string
-  ):
-      | number
-      | WrongArguments
-      | UserDoesNotExist
-      | NotEnoughMoney {
-    if (!userName || !currency || !amount || amount <= 0) throw new WrongArguments();
+    userName: string,
+    amount: number,
+    currency: string
+  ): number | WrongArguments | UserDoesNotExist | NotEnoughMoney {
+    if (!userName || !currency || !amount || amount <= 0)
+      throw new WrongArguments();
 
     if (!UsersDao.userExists(userName)) throw new UserDoesNotExist();
 
@@ -74,15 +72,15 @@ class BankingService {
     | NotEnoughMoney
     | SenderDoesNotExist
     | ReceiverDoesNotExist {
-    if (!fromUsername || !toUsername || !amount || amount < 0 || !currency)
+    if (!fromUsername || !toUsername || !amount || amount <= 0 || !currency)
       throw new WrongArguments();
-
-    if (!UsersDao.enoughMoney(fromUsername, amount, currency))
-      throw new NotEnoughMoney();
 
     if (!UsersDao.userExists(fromUsername)) throw new SenderDoesNotExist();
 
     if (!UsersDao.userExists(toUsername)) throw new ReceiverDoesNotExist();
+
+    if (!UsersDao.enoughMoney(fromUsername, amount, currency))
+      throw new NotEnoughMoney();
 
     return UsersDao.sendMoney(fromUsername, toUsername, amount, currency);
   }

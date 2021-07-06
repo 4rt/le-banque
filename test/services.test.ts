@@ -1,12 +1,12 @@
 import BankingService from '../src/services/BankingService';
-import UsersDao from "../src/daos/UsersDao";
+import UsersDao from '../src/daos/UsersDao';
 
 describe('BankingService', () => {
   describe('Service class instance', () => {
     it('has one instance', () => {
       // @ts-ignore
       expect(() => new BankingService()).toThrow();
-    })
+    });
   });
 
   describe('User creation', () => {
@@ -18,18 +18,20 @@ describe('BankingService', () => {
       const createdUser = BankingService.createUser('newName');
 
       expect(createdUser).toEqual('newName');
-    })
+    });
 
     it('creates user throws WrongArguments exception', () => {
       // @ts-ignore
       expect(() => BankingService.createUser()).toThrow('Wrong arguments');
       expect(() => BankingService.createUser('')).toThrow('Wrong arguments');
-    })
+    });
 
     it('creates user throws UserAlreadyExists exception', () => {
       BankingService.createUser('newName');
-      expect(() => BankingService.createUser('newName')).toThrow('User already exists');
-    })
+      expect(() => BankingService.createUser('newName')).toThrow(
+        'User already exists'
+      );
+    });
   });
 
   describe('User balance', () => {
@@ -43,7 +45,7 @@ describe('BankingService', () => {
               amount: 10,
             },
           ],
-        }
+        },
       ];
     });
 
@@ -51,28 +53,40 @@ describe('BankingService', () => {
       const balance = BankingService.getBalance('test', 'USD');
 
       expect(balance).toBe(10);
-    })
+    });
 
     it('throws WrongArguments exception', () => {
       // @ts-ignore
-      expect(() => BankingService.getBalance()).toThrow('Wrong arguments')
+      expect(() => BankingService.getBalance()).toThrow('Wrong arguments');
       // @ts-ignore
-      expect(() => BankingService.getBalance('')).toThrow('Wrong arguments')
+      expect(() => BankingService.getBalance('')).toThrow('Wrong arguments');
       // @ts-ignore
-      expect(() => BankingService.getBalance('', '')).toThrow('Wrong arguments')
+      expect(() => BankingService.getBalance('', '')).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.getBalance('test')).toThrow('Wrong arguments')
+      expect(() => BankingService.getBalance('test')).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.getBalance('test', '')).toThrow('Wrong arguments')
+      expect(() => BankingService.getBalance('test', '')).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.getBalance('', 'USD')).toThrow('Wrong arguments')
+      expect(() => BankingService.getBalance('', 'USD')).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.getBalance(null, undefined)).toThrow('Wrong arguments')
-    })
+      expect(() => BankingService.getBalance(null, undefined)).toThrow(
+        'Wrong arguments'
+      );
+    });
 
     it('throws UserDoesNotExist exception', () => {
-      expect(() => BankingService.getBalance('yolo', 'RUB')).toThrow('User does not exists')
-    })
+      expect(() => BankingService.getBalance('yolo', 'RUB')).toThrow(
+        'User does not exists'
+      );
+    });
   });
 
   describe('Transactions', () => {
@@ -95,7 +109,7 @@ describe('BankingService', () => {
               amount: 10,
             },
           ],
-        }
+        },
       ];
     });
 
@@ -103,66 +117,158 @@ describe('BankingService', () => {
       const newBalance = BankingService.deposit('test', 20, 'USD');
 
       expect(newBalance).toBe(30);
-    })
+    });
 
     it('deposit throws WrongArguments exception', () => {
       // @ts-ignore
-      expect(() => BankingService.deposit()).toThrow('Wrong arguments')
+      expect(() => BankingService.deposit()).toThrow('Wrong arguments');
       // @ts-ignore
-      expect(() => BankingService.deposit('')).toThrow('Wrong arguments')
+      expect(() => BankingService.deposit('')).toThrow('Wrong arguments');
       // @ts-ignore
-      expect(() => BankingService.deposit('', '')).toThrow('Wrong arguments')
+      expect(() => BankingService.deposit('', '')).toThrow('Wrong arguments');
       // @ts-ignore
-      expect(() => BankingService.deposit('test')).toThrow('Wrong arguments')
+      expect(() => BankingService.deposit('test')).toThrow('Wrong arguments');
       // @ts-ignore
-      expect(() => BankingService.deposit('test', '')).toThrow('Wrong arguments')
+      expect(() => BankingService.deposit('test', '')).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.deposit('', 'USD')).toThrow('Wrong arguments')
+      expect(() => BankingService.deposit('', 'USD')).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.deposit(null, undefined)).toThrow('Wrong arguments')
+      expect(() => BankingService.deposit(null, undefined)).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.deposit('test', -10)).toThrow('Wrong arguments')
+      expect(() => BankingService.deposit('test', -10)).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.deposit('test', 0)).toThrow('Wrong arguments')
-    })
+      expect(() => BankingService.deposit('test', 0)).toThrow(
+        'Wrong arguments'
+      );
+    });
 
     it('throws UserDoesNotExist exception', () => {
-      expect(() => BankingService.deposit('yolo', 10000,'RUB')).toThrow('User does not exists')
-    })
+      expect(() => BankingService.deposit('yolo', 10000, 'RUB')).toThrow(
+        'User does not exists'
+      );
+    });
 
     it('withdraws amount of currency', () => {
       const newBalance = BankingService.withdraw('test', 1, 'USD');
 
       expect(newBalance).toBe(9);
-    })
+    });
 
     it('withdraw throws WrongArguments exception', () => {
       // @ts-ignore
-      expect(() => BankingService.withdraw()).toThrow('Wrong arguments')
+      expect(() => BankingService.withdraw()).toThrow('Wrong arguments');
       // @ts-ignore
-      expect(() => BankingService.withdraw('')).toThrow('Wrong arguments')
+      expect(() => BankingService.withdraw('')).toThrow('Wrong arguments');
       // @ts-ignore
-      expect(() => BankingService.withdraw('', '')).toThrow('Wrong arguments')
+      expect(() => BankingService.withdraw('', '')).toThrow('Wrong arguments');
       // @ts-ignore
-      expect(() => BankingService.withdraw('test')).toThrow('Wrong arguments')
+      expect(() => BankingService.withdraw('test')).toThrow('Wrong arguments');
       // @ts-ignore
-      expect(() => BankingService.withdraw('test', '')).toThrow('Wrong arguments')
+      expect(() => BankingService.withdraw('test', '')).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.withdraw('', 'USD')).toThrow('Wrong arguments')
+      expect(() => BankingService.withdraw('', 'USD')).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.withdraw(null, undefined)).toThrow('Wrong arguments')
+      expect(() => BankingService.withdraw(null, undefined)).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.withdraw('test', -10)).toThrow('Wrong arguments')
+      expect(() => BankingService.withdraw('test', -10)).toThrow(
+        'Wrong arguments'
+      );
       // @ts-ignore
-      expect(() => BankingService.withdraw('test', 0)).toThrow('Wrong arguments')
-    })
+      expect(() => BankingService.withdraw('test', 0)).toThrow(
+        'Wrong arguments'
+      );
+    });
+
+    it('withdraw throws UserDoesNotExist exception', () => {
+      expect(() => BankingService.withdraw('yolo', 1000, 'USD')).toThrow(
+        'User does not exists'
+      );
+    });
+
+    it('withdraw throws NotEnoughMoney exception', () => {
+      expect(() => BankingService.withdraw('test', 1000, 'USD')).toThrow(
+        'Not enough money'
+      );
+    });
 
     it('sends money', () => {
       // @ts-ignore
-      const { fromUsernameBalance, toUsernameBalance } = BankingService.send('test', 'test2', 1, 'USD');
+      const { fromUsernameBalance, toUsernameBalance } = BankingService.send(
+        'test',
+        'test2',
+        1,
+        'USD'
+      );
 
       expect(fromUsernameBalance).toBe(9);
       expect(toUsernameBalance).toBe(11);
-    })
-  })
+    });
+
+    it('sends money throws WrongArguments exception', () => {
+      // @ts-ignore
+      expect(() => BankingService.send()).toThrow('Wrong arguments');
+      // @ts-ignore
+      expect(() => BankingService.send('')).toThrow('Wrong arguments');
+      // @ts-ignore
+      expect(() => BankingService.send('', '')).toThrow('Wrong arguments');
+      // @ts-ignore
+      expect(() => BankingService.send('', '', '')).toThrow('Wrong arguments');
+      // @ts-ignore
+      expect(() => BankingService.send('', '', '', '')).toThrow(
+        'Wrong arguments'
+      );
+      // @ts-ignore
+      expect(() => BankingService.send('test')).toThrow('Wrong arguments');
+      // @ts-ignore
+      expect(() => BankingService.send('test', 'test2')).toThrow(
+        'Wrong arguments'
+      );
+      // @ts-ignore
+      expect(() => BankingService.send('', 'USD')).toThrow('Wrong arguments');
+      // @ts-ignore
+      expect(() => BankingService.send(null, undefined, false, '')).toThrow(
+        'Wrong arguments'
+      );
+      // @ts-ignore
+      expect(() => BankingService.send('test', 'test2', -10, 'USD')).toThrow(
+        'Wrong arguments'
+      );
+      // @ts-ignore
+      expect(() => BankingService.send('test', 'test2', 0, 'USD')).toThrow(
+        'Wrong arguments'
+      );
+    });
+
+    it('send money throws NotEnoughMoney exception', () => {
+      expect(() => BankingService.send('test', 'test2', 1000, 'USD')).toThrow(
+        'Not enough money'
+      );
+    });
+
+    it('send money throws SenderDoesNotExist exception', () => {
+      expect(() => BankingService.send('yolo', 'test', 1, 'USD')).toThrow(
+        'Sender does not exist'
+      );
+    });
+
+    it('send money throws ReceiverDoesNotExist exception', () => {
+      expect(() => BankingService.send('test', 'yolo', 1, 'USD')).toThrow(
+        'Receiver does not exist'
+      );
+    });
+  });
 });
