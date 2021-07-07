@@ -47,15 +47,22 @@ class UsersDao {
 
   deposit(userName: string, amount: number, currency: string): number {
     const userIndex = this.users.findIndex(user => user.userName === userName);
+    const currencyIndex = this.users[userIndex].balance.findIndex(
+      balance => balance.currency === currency
+    );
+    let newBalance: number;
 
-    let newBalance = 0;
-
-    this.users[userIndex].balance.forEach(balance => {
-      if (balance.currency === currency) {
-        newBalance = balance.amount += amount;
-        balance.amount = newBalance;
-      }
-    });
+    if (currencyIndex >= 0) {
+      newBalance = this.users[userIndex].balance[
+        currencyIndex
+      ].amount += amount;
+    } else {
+      newBalance = amount;
+      this.users[userIndex].balance.push({
+        currency: currency,
+        amount: amount,
+      });
+    }
 
     return newBalance;
   }

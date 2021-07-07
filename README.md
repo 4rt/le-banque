@@ -33,7 +33,7 @@ type Ok = { success: true };
 `const withdraw = (username: string, amount: number, currency: string): (Ok & { newBalance: number } | BankingError) => {};`
 
 - Decreases user's balance in given `currency` by `amount` value
-- Returns `new_balance` of the user in given format
+- Returns `newBalance` of the user in given format
 
 `const getBalance = (username: string, currency: string): (Ok & { balance: number } | BankingError) => {};`
 

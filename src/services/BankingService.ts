@@ -9,10 +9,6 @@ import {
 } from '../errors';
 
 class BankingService {
-  constructor() {
-    console.log('BankingService singleton');
-  }
-
   createUser(userName: string): string | WrongArguments | UserAlreadyExists {
     if (!userName) throw new WrongArguments();
 

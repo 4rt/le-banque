@@ -2,15 +2,14 @@ import { BankingError } from './errors/types';
 import { IExBanking, Ok } from './types';
 import BankingService from './services/BankingService';
 import ErrorResponse from './models/ErrorResponse';
-import OkResponse from './models/OkResponse';
+import { OkResponseBuilder } from './builders/OkResponseBuilder';
 
-// TODO: use builder for OkResponse
 export class ExBanking implements IExBanking {
   public createUser(username: string): Ok | BankingError {
     try {
       BankingService.createUser(username);
 
-      return new OkResponse();
+      return new OkResponseBuilder().build();
     } catch (error) {
       return new ErrorResponse(error);
     }
@@ -23,10 +22,7 @@ export class ExBanking implements IExBanking {
     try {
       const balance = BankingService.getBalance(username, currency) as number;
 
-      return {
-        ...new OkResponse(),
-        ...{ balance },
-      };
+      return new OkResponseBuilder().withBalance(balance).build();
     } catch (error) {
       return new ErrorResponse(error);
     }
@@ -44,10 +40,7 @@ export class ExBanking implements IExBanking {
         currency
       ) as number;
 
-      return {
-        ...new OkResponse(),
-        ...{ newBalance },
-      };
+      return new OkResponseBuilder().withNewBalance(newBalance).build();
     } catch (error) {
       return new ErrorResponse(error);
     }
@@ -65,10 +58,7 @@ export class ExBanking implements IExBanking {
         currency
       ) as number;
 
-      return {
-        ...new OkResponse(),
-        ...{ newBalance },
-      };
+      return new OkResponseBuilder().withNewBalance(newBalance).build();
     } catch (error) {
       return new ErrorResponse(error);
     }
@@ -90,11 +80,10 @@ export class ExBanking implements IExBanking {
         currency
       ) as { fromUsernameBalance: number; toUsernameBalance: number };
 
-      return {
-        ...new OkResponse(),
-        ...{ fromUsernameBalance },
-        ...{ toUsernameBalance },
-      };
+      return new OkResponseBuilder()
+        .withFromUsernameBalance(fromUsernameBalance)
+        .withToUsernameBalance(toUsernameBalance)
+        .build();
     } catch (error) {
       return new ErrorResponse(error);
     }
