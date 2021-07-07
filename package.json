@@ -10,6 +10,10 @@
   "engines": {
     "node": ">=14"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:4rt/le-banque.git"
+  },
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
